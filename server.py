@@ -1,11 +1,17 @@
 import os
 import random
-
+import sayings
 from bottle import route, run
 
 
 def generate_message():
-    return "Сегодня уже не вчера, ещё не завтра"
+  beginning = sayings.beginnings[random.randrange(7)]
+  subject = sayings.subjects[random.randrange(7)]
+  verb = sayings.verbs[random.randrange(7)]
+  action = sayings.actions[random.randrange(7)]
+  end = sayings.ends[random.randrange(7)]
+  result = "{} {} {} {} {}".format(beginning, subject, verb, action, end)
+  return result
 
 
 @route("/")
@@ -30,9 +36,16 @@ def index():
     return html
 
 
-@route("/api/roll/<some_id:int>")
+@route("/api/generate/")
+def example_api_response():
+  return generate_message()
+
+@route("/api/generate/<some_id:int>")
 def example_api_response(some_id):
-    return {"requested_id": some_id, "random_number": random.randrange(some_id)}
+  result_str = ''
+  for x in range(some_id):
+    result_str += generate_message() + '\n'
+  return result_str
 
 
 if os.environ.get("APP_LOCATION") == "heroku":
