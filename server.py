@@ -38,14 +38,14 @@ def index():
 
 @route("/api/generate/")
 def example_api_response():
-  return generate_message()
+  return {"message": generate_message()}
 
 @route("/api/generate/<some_id:int>")
 def example_api_response(some_id):
-  result_str = ''
+  str_list = []
   for x in range(some_id):
-    result_str += generate_message() + '\n'
-  return result_str
+    str_list.append(generate_message())
+  return {"messages": str_list}
 
 
 if os.environ.get("APP_LOCATION") == "heroku":
